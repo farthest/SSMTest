@@ -55,7 +55,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="mapperLocations" value="classpath:mapping/*.xml"/>
         <property name="typeAliasesPackage" value="classpath:com.**.entity"/>
     </bean>
     <!-- sqlSessionFactory的属性 -->
@@ -66,7 +66,7 @@
 
     <!-- 转换器MapperScannerConfig它可以将接口转换为Spring容器中的Bean，不需要注解(@service) -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ssmtest.mapper"/>
+        <property name="basePackage" value="com.ssm.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 

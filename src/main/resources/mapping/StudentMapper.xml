@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssmtest.mapper.StudentMapper">
+<mapper namespace="com.ssm.dao.StudentMapper">
     <!--这里的type，因为我在spring-mybatis.xml中配置了包的简称，所以不需要再写包名了，否则需要加上，id的话在后面的ResultMap中会用到，如果像我这样实体类的属性和数据库字段名不一致，则需要用ResultMap作为返回值，否则获取的值的字段会变成null-->
     <!--<resultMap type="BoxDetail" id="BoxDetailMap">-->
         <!--<result property="boxId" column="BOX_ID"/>-->
@@ -9,7 +9,15 @@
     <!--<select id="addStudent" parameterType="String" resultMap="Integer">-->
         <!--INSERT student() VALUE BOX_ID = #{boxId}-->
     <!--</select>    -->
-    <select id="findStudentById" parameterType="Integer" resultType="com.ssmtest.po.Student">
+    <resultMap id="studentResultMap" type="com.ssm.po.Student">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER" />
+        <result property="no" column="no" javaType="String"
+                jdbcType="VARCHAR" />
+        <result property="name" column="name" javaType="String"
+                jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="findStudentById" parameterType="Integer" resultMap="studentResultMap">
       SELECT * FROM student WHERE id = #{id}
     </select>
 </mapper>

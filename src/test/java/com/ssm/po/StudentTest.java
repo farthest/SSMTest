@@ -1,6 +1,6 @@
-package com.ssmtest.po;
+package com.ssm.po;
 
-import com.ssmtest.mapper.StudentMapper;
+import com.ssm.dao.StudentMapper;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

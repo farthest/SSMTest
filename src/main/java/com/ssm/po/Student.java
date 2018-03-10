@@ -1,4 +1,4 @@
-package com.ssmtest.po;
+package com.ssm.po;
 
 public class Student {
     private int id;
