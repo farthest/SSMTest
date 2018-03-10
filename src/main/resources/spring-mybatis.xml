@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+    <!-- 数据库连接池 -->
+    <!-- 加载配置文件 -->
+    <!-- 第一种方式：加载一个properties文件 -->
+    <!--<context:property-placeholder location="classpath:db.properties" />-->
+
+    <!-- 第二种方式：加载一个properties文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:db.properties"/>
+    </bean>
+
+
+    <!-- 第三种方式：加载多个properties文件
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+                <value>classpath:common.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="UTF-8"/>
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties"/>
+    </bean>
+    -->
+
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <!--<property name="maxTotal" value="${jdbc.maxTotal}" />-->
+        <property name="maxIdle" value="${jdbc.maxIdle}" />
+        <property name="initialSize" value="${jdbc.initialSize}" />
+    </bean>
+
+    <!-- 配置mybatis的sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="classpath:com.**.entity"/>
+    </bean>
+    <!-- sqlSessionFactory的属性 -->
+    <!-- 1,dataSource：必须属性 -->
+    <!-- 2,configLocation：当mybatis-config.xml放在src下(个人习惯)，配置该属性。 目前别名已经配置在SqlSessionFactoryBean里，可否省略mybatis-config.xml文件我也不清楚。若相知，请相告！谢谢！ -->
+    <!-- 3,mapperLocations：自动扫描mapper.xml文件。 -->
+    <!-- 4,typeAliasesPackage：自动配置别名 -->
+
+    <!-- 转换器MapperScannerConfig它可以将接口转换为Spring容器中的Bean，不需要注解(@service) -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ssmtest.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+    <!-- 配置事务 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- 配置事务通知 -->
+    <!-- 没有采用<tx:annotation-driven/>，即注解事务管理。是因为注解事务需要在很多public方法前加上@Transactional，很麻烦，用以下方法可以一劳永逸 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="edit*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    <!-- 拦截以'insert','add'...'find'等开头的方法名方法。最后一句代表拦截所有方法 -->
+</beans>
