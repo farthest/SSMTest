@@ -1,19 +1,12 @@
-package com.ssm.po;
+package com.ssm.entity;
 
 public class Student {
     private int id;
-    private String no;
+    private String number;
     private String name;
-
-    public Student(int id, String no, String name) {
-        this.id = id;
-        this.no = no;
-        this.name = name;
-    }
 
     public Student() {
     }
-
 
     public int getId() {
         return id;
@@ -23,12 +16,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getNo() {
-        return no;
+    public String getNumber() {
+        return number;
     }
 
-    public void setNo(String no) {
-        this.no = no;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getName() {
@@ -39,11 +32,17 @@ public class Student {
         this.name = name;
     }
 
+    public Student(int id, String number, String name) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", no='" + no + '\'' +
+                ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

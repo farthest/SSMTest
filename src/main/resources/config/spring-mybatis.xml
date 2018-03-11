@@ -21,7 +21,7 @@
 
     <!-- 第二种方式：加载一个properties文件 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:db.properties"/>
+        <property name="location" value="classpath:config/db.properties"/>
     </bean>
 
 
@@ -54,8 +54,8 @@
     <!-- 配置mybatis的sqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:mapping/*.xml"/>
+        <property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mapping/*Dao.xml"/>
         <property name="typeAliasesPackage" value="classpath:com.**.entity"/>
     </bean>
     <!-- sqlSessionFactory的属性 -->
@@ -70,6 +70,8 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
+    <context:component-scan base-package="com.ssm.service"/>
+
     <!-- 配置事务 -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -77,6 +79,7 @@
     </bean>
 
     <!-- 配置事务通知 -->
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
     <!-- 没有采用<tx:annotation-driven/>，即注解事务管理。是因为注解事务需要在很多public方法前加上@Transactional，很麻烦，用以下方法可以一劳永逸 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
