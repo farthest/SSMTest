@@ -66,11 +66,11 @@
 
     <!-- 转换器MapperScannerConfig它可以将接口转换为Spring容器中的Bean，不需要注解(@service) -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ssm.dao"/>
+        <property name="basePackage" value="com.**.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
-    <context:component-scan base-package="com.ssm.service"/>
+    <context:component-scan base-package="com.**.service"/>
 
     <!-- 配置事务 -->
     <bean id="transactionManager"
